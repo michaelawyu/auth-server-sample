@@ -51,8 +51,8 @@ function handleACPKCEAuthRequest (req, res) {
 
   const clientQuery = datastore
     .createQuery('client')
-    .filter('client-id', '=', req.body.client_id)
-    .filter('redirect-url', '=', req.body.redirect_url)
+    .filter('client-id', '=', req.query.client_id)
+    .filter('redirect-url', '=', req.query.redirect_url)
     .filter('acpkce-enabled', '=', true);
 
   datastore
@@ -94,8 +94,8 @@ function handleACAuthRequest (req, res) {
 
   const clientQuery = datastore
     .createQuery('client')
-    .filter('client-id', '=', req.body.client_id)
-    .filter('redirect-url', '=', req.body.redirect_url)
+    .filter('client-id', '=', req.query.client_id)
+    .filter('redirect-url', '=', req.query.redirect_url)
     .filter('ac-enabled', '=', true);
 
   datastore
@@ -137,8 +137,8 @@ function handleImplicitAuthRequest (req, res) {
 
   const clientQuery = datastore
     .createQuery('client')
-    .filter('client-id', '=', req.body.client_id)
-    .filter('redirect-url', '=', req.body.redirect_url)
+    .filter('client-id', '=', req.query.client_id)
+    .filter('redirect-url', '=', req.query.redirect_url)
     .filter('implicit-enabled', '=', true);
 
   datastore
@@ -150,7 +150,7 @@ function handleImplicitAuthRequest (req, res) {
     })
     .then(() => {
       const html = pug.renderFile(path.join(__dirname, 'auth.pug'), {
-        response_type: 'code',
+        response_type: 'token',
         client_id: req.query.client_id,
         redirect_url: req.query.redirect_url,
         code_challenge: req.query.code_challenge
