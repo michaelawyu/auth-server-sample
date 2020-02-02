@@ -46,6 +46,8 @@ Use the [Pricing Calculator](https://cloud.google.com/products/calculator/) to g
 
     h. Repeat the steps above and create **5** `client` kind entities, with the following properties:
 
+    **Be mindfull that there are multiple properties here, not just three different. Many different enabled values which is important for the tutorial to work**
+
     | Property Name      | Property Type | Property Value           |
     |--------------------|---------------|--------------------------|
     | `client-id`        | `String`      | `sample-implicit-client` |
@@ -193,17 +195,19 @@ The sample includes the following files:
 | auth.pug     | A [pug](https://github.com/pugjs/pug) HTML template for preparing the access request page.             |
 | function.js  | Functions to deploy.                                                                                   |
 | package.json | [Project metadata](https://docs.npmjs.com/files/package.json).                                         |
-| private.pem  | A private key for generating access tokens. **You should replace this key file with one of your own**. |
-| public.pem   | A public key for verifying access tokens. **You should replace this key file with one of your own**.   |
+| private.pem  | A private key for generating access tokens. **You should replace this key file with one of your own, see link beneath for inspiration**. |
+| public.pem   | A public key for verifying access tokens. **You should replace this key file with one of your own, see link beneat for inspiration**.   |
+
+You can generate the privatekey like they are doing here: https://bshaffer.github.io/oauth2-server-php-docs/overview/jwt-access-tokens/
 
 ## Deploying the Code
 
 Deploy the functions using the following commands. It may take a few minutes to finish.
 
 ```
-gcloud beta functions deploy token --trigger-http
-gcloud beta functions deploy auth --trigger-http
-gcloud beta functions deploy signin --trigger-http
+gcloud functions deploy token --trigger-http --runtime nodejs10
+gcloud functions deploy auth --trigger-http --runtime nodejs10
+gcloud functions deploy signin --trigger-http --runtime nodejs10
 ```
 
 Your functions are available at
@@ -266,6 +270,11 @@ You can always view the details of deployed functions via [Cloud Console](https:
                          .replace(/\//g, '_')
                          .replace(/=/g, '');
     ```
+    or use these two copy pastable lines
+    ```
+    var code_verifier = crypto.randomBytes(64).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+var code_challenge = crypto.createHash('sha256').update(code_verifier).digest().toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    ```
 
     Write down the values of code_verifier and code_challenge.
 
@@ -283,7 +292,7 @@ You can always view the details of deployed functions via [Cloud Console](https:
 
 4. Run command
 
-    `curl -d "grant_type=authorization_code&client_id=sample-acpkce-clientauthorization_code=[AUTHORIZATION_CODE]&code_verfier=[CODE_VERIFIER]&redirect_url=https://www.google.com" -X POST 'https://us-central1-testbed-195403.cloudfunctions.net/token'`
+    `curl -d "grant_type=authorization_code&client_id=sample-acpkce-client&authorization_code=[AUTHORIZATION_CODE]&code_verfier=[CODE_VERIFIER]&redirect_url=https://www.google.com" -X POST 'https://us-central1-testbed-195403.cloudfunctions.net/token'`
 
     Replace `[AUTHORIZATION_CODE]` and `[CODE_VERIFIER]` with values of your own. Note that this request includes parameters `grant_type`, `client_id`, `code_verifier`, `authorization_code` and `redirect_url`.
 
