@@ -206,8 +206,12 @@ Deploy the functions using the following commands. It may take a few minutes to 
 
 ```
 gcloud functions deploy token --trigger-http --runtime nodejs10
-gcloud functions deploy auth --trigger-http --runtime nodejs10
 gcloud functions deploy signin --trigger-http --runtime nodejs10
+```
+Before deploying auth, you need to change the pug template with your signing url
+See [auth.pug](./code/auth.pug)
+```
+gcloud functions deploy auth --trigger-http --runtime nodejs10
 ```
 
 Your functions are available at
