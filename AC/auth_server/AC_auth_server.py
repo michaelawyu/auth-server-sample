@@ -95,7 +95,7 @@ def exchange_for_token():
   access_token = generate_access_token()
   
   return json.dumps({ 
-    "access_token": access_token.decode(),
+    "access_token": access_token,
     "token_type": "JWT",
     "expires_in": JWT_LIFE_SPAN
   })
