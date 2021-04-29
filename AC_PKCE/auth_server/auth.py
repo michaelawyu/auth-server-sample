@@ -43,8 +43,8 @@ def generate_access_token():
     "exp": time.time() + JWT_LIFE_SPAN
   }
 
-  access_token = jwt.encode(payload, private_key, algorithm = 'RS256').decode()
-
+  access_token = jwt.encode(payload, private_key, algorithm = 'RS256')
+  
   return access_token
 
 def generate_authorization_code(client_id, redirect_url, code_challenge):
